@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="header.js"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-wrapper blue-grey darken-4">
+      <a href="./" class="brand-logo.right">BlocklyDuino Editor</a>
+      <ul class="right show-on-small">
+        <li><a class="tooltipped" href="https://chrome.google.com/webstore/detail/blocklyduino-editor/ohncgafccgdbigbbikgkfbkiebahihmb" target="_blank"  id="get-app" data-tooltip="I am tooltip"><i class="mdi-action-get-app"></i></a></li>
+        <li><a class="tooltipped" href="http://lets.makewitharduino.com" target="_blank" id="go-to-sample" data-tooltip="I am tooltip"><i class="mdi-action-receipt"></i></a></li>
+        <li><a class="waves-effect waves-light modal-trigger tooltipped" id="change-lang" href="#modal1" data-tooltip="I am tooltip"><i class="mdi-action-settings"></i></a></li>
+      </ul>
+    </div>
+  </nav>
+
+    <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <form action="#">
+        <p id="dialog-lang-title">Language Setting</p>
+        <p>
+          <input class="with-gap" name="group1" type="radio" id="select-lang-en" value="en"/>
+          <label for="select-lang-en" id="label-en">English</label>
+        </p>
+        <p>
+          <input class="with-gap" name="group1" type="radio" id="select-lang-ja" value="ja"/>
+          <label for="select-lang-ja" id="label-ja">日本語</label>
+        </p>
+        <p>
+          <input class="with-gap" name="group1" type="radio" id="select-lang-ja_kids" value="ja_kids"/>
+          <label for="select-lang-ja_kids" id="label-ja-kids">にほんご</label>
+        </p>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="change_lang()">OK</a>
+    </div>
+  </div>
+
+  <table id="main">
+    <tr>
+      <td>
+        <table id="tab">
+          <tr id="tabRow">
+            <td id="tab_blocks" class="tabon " onclick="tabClick('blocks')">Blocks</td>
+            <td class="tabmin">&nbsp;</td>
+            <td id="tab_arduino" class="taboff" onclick="tabClick('arduino')"></td>
+            <td class="tabmin">&nbsp;</td>
+            <td class="tabmax">
+              <a href="#" class="hide-link tooltipped" id="copy-button" data-tooltip="I am tooltip"  data-clipboard-target="content_arduino" data-clipboard-text="Clip Me!"><i class="small mdi-content-content-copy"></i></a>
+              <a href="#" class="hide-link tooltipped" id="discard" onclick="discard()" data-tooltip="I am tooltip"><i class="small mdi-navigation-refresh"></i></a>
+              <a href="#" class="hide-link tooltipped" data-tooltip="I am tooltip"  id="save" onclick="save()"><i class="small mdi-file-cloud-download"></i></a>
+              <a href="#" class="hide-link tooltipped"  id="fakeload" data-tooltip="I am tooltip"><i class="small mdi-file-cloud-upload"></i></a>
+              <input type="file" id="load" style="display: none;" />
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td height="99%" id="content_area"></td>
+    </tr>
+  </table>
+  <div id="content_blocks" class="content"></div>
+  <textarea id="content_arduino" class="content" readonly wrap="off"></textarea>
+
+  <xml id="toolbox" style="display: none">
+    <category id="category_initializes">
+      <block type="initializes_setup"></block>
+    </category>
+    <category id="category_inout">
+      <block type="inout_highlow"></block>
+      <block type="inout_digitalpin"></block>
+      <block type="inout_digital_write"></block>
+      <block type="inout_custom_digital_write"></block>
+      <block type="inout_digital_read"></block>
+      <block type="inout_analog_write">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">255</field>
+          </block>
+        </value>
+      </block>
+      <block type="inout_analog_read"></block>
+      <block type="pulsein"></block>
+      <block type="tone"></block>
+      <block type="custom_tone">
+        <value name="FREQ">
+          <block type="math_number">
+            <field name="NUM">255</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category id="category_serial">
+      <block type="serial_available"></block>
+      <block type="serial_print"></block>
+      <block type="serial_println"></block>
+      <block type="serial_read"></block>
+    </category>
+    <sep></sep>
+    <category id="category_servo">
+      <block type="servo_write">
+        <value name="ANGLE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="servo_writeus">
+        <value name="ANGLE_US">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="servo_read"></block>
+      <block type="servo_attached"></block>
+      <block type="servo_attach"></block>
+      <block type="servo_custom_attach"></block>
+      <block type="servo_detach"></block>
+    </category>
+    <category id="category_ultrasonic">
+      <block type="ultrasonic_setting"></block>
+      <block type="ultrasonic_maxrange"></block>
+      <block type="ultrasonic_distance"></block>
+    </category>
+    <category id="category_lcd">
+      <block type="lcd_init"></block>
+      <block type="lcd_begin"></block>
+      <block type="lcd_print"></block>
+      <block type="lcd_setcursor"></block>
+      <block type="lcd_clear"></block>
+      <!--block type="lcd_scrolldisplayright"></block-->
+      <!--block type="lcd_scrolldisplayleft"></block-->
+      <block type="lcd_autoscroll"></block>
+      <block type="lcd_noautoscroll"></block>
+      <!--block type="lcd_lefttoright"></block-->
+      <!--block type="lcd_righttoleft"></block-->
+    </category>
+    <category id="category_rgbled">
+      <block type="rgbled_begin"></block>
+      <block type="rgbled_setpixelcolor"></block>
+      <block type="rgbled_custom_setpixelcolor">
+        <value name="TARGET">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="R">
+          <block type="math_number">
+            <field name="NUM">255</field>
+          </block>
+        </value>
+        <value name="G">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="B">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="rgbled_show"></block>
+    </category>
+    <category id="category_other_sensor">
+      <block type="dht_read"></block>
+    </category>
+    <sep></sep>
+    <category id="category_logic">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category id="category_loops">
+      <block type="controls_repeat"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category id="category_time">
+      <block type="millis"></block>
+      <block type="micros"></block>
+      <block type="delay"></block>
+      <block type="delayMicroseconds"></block>
+    </category>
+    <category id="category_array">
+      <block type="array_create_with"></block>
+      <block type="array_getIndex">
+        <value name="AT">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category id="category_math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_constrain"></block>
+      <block type="math_pow"></block>
+      <block type="math_random_max_min"></block>
+      <block type="math_map"></block>
+      <block type="math_custom_map"></block>
+    </category>
+    <category id="category_text">
+      <block type="text"></block>
+      <block type="text_commentout"></block>
+      <block type="text_length"></block>
+      <block type="text_charAt">
+        <value name="INDEX">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category id="category_variables" custom="VARIABLE"></category>
+    <category id="category_functions" custom="PROCEDURE"></category>
+    <sep></sep>
+    <!--category id="category_involt">
+<block type="involt_directmode"></block>
+<block type="involt_chromereceive"></block>
+<block type="involt_sendvalue"></block>
+<block type="involt_receivevalue"></block>
+</category-->
+  </xml>
+  <div class="info">
+  </div>
+</body>
+
+</html>
